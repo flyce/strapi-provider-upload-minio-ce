@@ -2,12 +2,11 @@ const Minio = require('minio');
 
 module.exports = {
   init(providerOptions) {
-    // init your provider if necessary
     const { port, useSSL, endPoint, accessKey, secretKey, bucket, host, folder } = providerOptions;
     const MINIO = new Minio.Client({
       endPoint,
       port: parseInt(port, 10) || 9000,
-      useSSL: true,
+      useSSL: useSSL === "true",
       accessKey,
       secretKey,
     });
@@ -32,8 +31,6 @@ module.exports = {
               const hostPart = (useSSL ? 'https://' : 'http://') + `${host}/`
               const filePath = `${bucket}/${path}`;
               file.url = `${hostPart}${filePath}`;
-              console.log(file);
-
 
               resolve();
             }
@@ -47,7 +44,6 @@ module.exports = {
           if (folder) {
             path = `${folder}/${path}`
           }
-          console.log(path);
 
           MINIO.removeObject(bucket, path, err => {
             if (err) {
