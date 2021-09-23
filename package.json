@@ -1,0 +1,26 @@
+{
+  "name": "strapi-provider-upload-minio-ce",
+  "version": "1.0.0",
+  "description": "minio provider for strapi ce 3.6.8",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flyce/strapi-provider-upload-minio-ce.git"
+  },
+  "keywords": [
+    "minio",
+    "strapi.io"
+  ],
+  "author": "Echo Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flyce/strapi-provider-upload-minio-ce/issues"
+  },
+  "homepage": "https://github.com/flyce/strapi-provider-upload-minio-ce#readme",
+  "dependencies": {
+    "minio": "^7.0.19"
+  }
+}
