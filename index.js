@@ -28,7 +28,7 @@ module.exports = {
                 return reject(err);
               }
 
-              const hostPart = (useSSL ? 'https://' : 'http://') + `${host}/`
+              const hostPart = (useSSL === 'true' ? 'https://' : 'http://') + `${host}/`
               const filePath = `${bucket}/${path}`;
               file.url = `${hostPart}${filePath}`;
 
