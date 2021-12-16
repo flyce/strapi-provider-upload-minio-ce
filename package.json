@@ -1,7 +1,7 @@
 {
   "name": "strapi-provider-upload-minio-ce",
-  "version": "1.0.1",
-  "description": "minio provider for strapi ce 3.6.8",
+  "version": "1.0.2",
+  "description": "minio provider for strapi ce 3.6.8 and 4.0.0",
   "main": "index.js", 
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
