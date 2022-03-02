@@ -10,14 +10,17 @@ module.exports = {
       accessKey,
       secretKey,
     });
+    const getPath = (file) => {
+      const pathChunk = file.path ? `${file.path}/` : '';
+      const path = folder ? `${folder}/${pathChunk}` : pathChunk;
+
+      return `${path}${file.hash}${file.ext}`;
+    };
     return {
       upload(file) {
         return new Promise((resolve, reject) => {
           // upload file to a bucket
-          let path = `${file.hash}${file.ext}`;
-          if (folder) {
-            path = `${folder}/${path}`
-          }
+          const path = getPath(file);
 
           MINIO.putObject(
             bucket,
@@ -40,10 +43,7 @@ module.exports = {
       delete(file) {
         console.log(file);
         return new Promise((resolve, reject) => {
-          let path = `${file.hash}${file.ext}`;
-          if (folder) {
-            path = `${folder}/${path}`
-          }
+          const path = getPath(file);
 
           MINIO.removeObject(bucket, path, err => {
             if (err) {
