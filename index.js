@@ -17,7 +17,7 @@ module.exports = {
       return `${path}${file.hash}${file.ext}`;
     };
     const getDeletePath = (file) => {
-      const hostPart = (useSSL === 'true' ? 'https://' : 'http://') + `${host}/`
+      const hostPart = (useSSL === 'true' ? 'https://' : 'http://') + `${host}/${bucket}/`;
       const path = file.url.replace(hostPart, '');
 
       return path;
