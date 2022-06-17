@@ -28,8 +28,8 @@ module.exports = {
           // upload file to a bucket
           const path = getUploadPath(file);
           
-          var metaData = {
-            'Content-Type': file.mime,
+          const metaData = {
+            'Content-Type': file.mime ? file.mime : 'application/octet-stream',
           }
 
           MINIO.putObject(
