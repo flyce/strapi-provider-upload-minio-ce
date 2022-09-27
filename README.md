@@ -53,7 +53,7 @@ module.exports = ({ env }) => ({
 });
 ```
 
-### Pictures cannot be displayed?
+## Pictures cannot be displayed?
 Mostly because of CSP, you can refer to [https://github.com/strapi/strapi/issues/12886](https://github.com/strapi/strapi/issues/12886) 
 
 If the image you uploaded is not displayed properly, you need to modify `./config/middlewares.js` as follows.
@@ -61,7 +61,6 @@ If the image you uploaded is not displayed properly, you need to modify `./confi
 // ./config/middlewares.js
 module.exports = [
   'strapi::errors',
-  'strapi::security',
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
@@ -80,13 +79,13 @@ module.exports = [
             "'self'",
             "data:",
             "blob:",
-            "REPLACE_YOUR_MINIO_HOST_HRER",
+            "REPLACE_YOUR_MINIO_HOST_HERE",
           ],
           "media-src": [
             "'self'",
             "data:",
             "blob:",
-            "REPLACE_YOUR_MINIO_HOST_HRER",
+            "REPLACE_YOUR_MINIO_HOST_HERE",
           ],
           upgradeInsecureRequests: null,
         },
