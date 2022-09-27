@@ -1,11 +1,12 @@
 const Minio = require('minio');
+const mime = require("mime-types");
 
 module.exports = {
   init(providerOptions) {
     const { port, useSSL, endPoint, accessKey, secretKey, bucket, host, folder } = providerOptions;
     const MINIO = new Minio.Client({
       endPoint,
-      port: parseInt(port, 10) || 9000,
+      port: +port || 9000,
       useSSL: useSSL === "true",
       accessKey,
       secretKey,
@@ -23,19 +24,22 @@ module.exports = {
       return path;
     };
     return {
+      uploadStream(file) {
+        return this.upload(file);
+      },
       upload(file) {
         return new Promise((resolve, reject) => {
           // upload file to a bucket
           const path = getUploadPath(file);
           
           const metaData = {
-            'Content-Type': file.mime ? file.mime : 'application/octet-stream',
+            'Content-Type': mime.lookup(file.ext) || 'application/octet-stream',
           }
 
           MINIO.putObject(
             bucket,
             path,
-            Buffer.from(file.buffer, 'binary'),
+            file.stream || Buffer.from(file.buffer, 'binary'),
             metaData,
             (err, _etag) => {
               if (err) {
