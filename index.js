@@ -1,13 +1,15 @@
 const Minio = require('minio');
 const mime = require("mime-types");
 
+
 module.exports = {
   init(providerOptions) {
-    const { port, useSSL, endPoint, accessKey, secretKey, bucket, host, folder } = providerOptions;
+    const { port, useSSL, endPoint, accessKey, secretKey, bucket, folder, private = false, expiry = 7 * 24 * 60 * 60 } = providerOptions;
+    const isUseSSL = (useSSL === 'true' || useSSL === true);
     const MINIO = new Minio.Client({
       endPoint,
       port: +port || 9000,
-      useSSL: useSSL === "true",
+      useSSL: isUseSSL,
       accessKey,
       secretKey,
     });
@@ -17,8 +19,13 @@ module.exports = {
 
       return `${path}${file.hash}${file.ext}`;
     };
-    const getDeletePath = (file) => {
-      const hostPart = (useSSL === 'true' ? 'https://' : 'http://') + `${host}:${port}/${bucket}/`;
+    const getHostPart = () => {
+      const protocol = isUseSSL ? 'https://' : 'http://';
+      const portSuffix = ((isUseSSL && +port === 443) || (isUseSSL && +port === 80)) ? '' : `:${port}`;
+      return protocol + endPoint + portSuffix + '/';
+    };
+    const getFilePath = (file) => {
+      const hostPart = getHostPart() + bucket + '/';
       const path = file.url.replace(hostPart, '');
 
       return path;
@@ -29,13 +36,10 @@ module.exports = {
       },
       upload(file) {
         return new Promise((resolve, reject) => {
-          // upload file to a bucket
           const path = getUploadPath(file);
-          
           const metaData = {
             'Content-Type': mime.lookup(file.ext) || 'application/octet-stream',
           }
-
           MINIO.putObject(
             bucket,
             path,
@@ -45,11 +49,9 @@ module.exports = {
               if (err) {
                 return reject(err);
               }
-
-              const hostPart = (useSSL === 'true' ? 'https://' : 'http://') + `${host}:${port}/`
+              const hostPart = getHostPart();
               const filePath = `${bucket}/${path}`;
               file.url = `${hostPart}${filePath}`;
-
               resolve();
             }
           );
@@ -57,7 +59,7 @@ module.exports = {
       },
       delete(file) {
         return new Promise((resolve, reject) => {
-          const path = getDeletePath(file);
+          const path = getFilePath(file);
 
           MINIO.removeObject(bucket, path, err => {
             if (err) {
@@ -66,6 +68,27 @@ module.exports = {
 
             resolve();
           });
+        });
+      },
+      isPrivate: () => {
+        return  (private === 'true' || private === true);
+      },
+      getSignedUrl(file) {
+        return new Promise((resolve, reject) => {
+          const url = new URL(file.url);
+          if (url.hostname !== endPoint) {
+            resolve({ url: file.url });
+          } else if (!url.pathname.startsWith(`/${bucket}/`)) {
+            resolve({ url: file.url });
+          } else {
+            const path = getFilePath(file);
+            MINIO.presignedGetObject(bucket, path, +expiry, (err, presignedUrl) => {
+              if (err) {
+                return reject(err);
+              }
+              resolve({ url: presignedUrl });
+            });
+          }
         });
       },
     };

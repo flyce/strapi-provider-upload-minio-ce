@@ -1,7 +1,7 @@
 {
   "name": "strapi-provider-upload-minio-ce",
-  "version": "1.1.1",
-  "description": "minio provider for strapi ce 3.6.x and 4.x",
+  "version": "1.2.0",
+  "description": "minio provider for strapi ce 3.6.x and 4.x, private bucket supported(4.x only)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,6 +22,6 @@
   "homepage": "https://github.com/flyce/strapi-provider-upload-minio-ce#readme",
   "dependencies": {
     "mime-types": "2.1.35",
-    "minio": "7.0.19"
+    "minio": "7.1.1"
   }
 }

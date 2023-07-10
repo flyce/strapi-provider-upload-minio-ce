@@ -1,6 +1,6 @@
 This upload provider uses the [JavaScript Minio.Client](https://docs.min.io/docs/javascript-client-api-reference.html) to upload files to a (self hosted) instance of [Minio](https://min.io/).
 
-It's compatible with the strapi ce 3.6.x and 4.x.
+It's compatible with the strapi ce 3.6.x and 4.x. And also support private bucket.
 
 # How to use
 
@@ -22,10 +22,11 @@ module.exports = ({ env }) => ({
         secretKey: env('MINIO_SECRET_KEY', 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'),
         bucket: env('MINIO_BUCKET', 'test-2021-09-22'),
         endPoint: env('MINIO_ENDPOINT', 'play.min.io'),
-        port: env('MINIO_PORT', '9000'),
-        useSSL: env('MINIO_USE_SSL', 'true'),
-        host: env('MINIO_HOST', 'play.min.io'),
+        port: env('MINIO_PORT', 9000),
+        useSSL: env('MINIO_USE_SSL', true),
         folder: env('MINIO_FOLDER', 'cms'),
+        private: env('MINIO_PRIVATE', false), // private bucket
+        expiry: env('MINIO_EXPIRY', 7 * 24 * 60 * 60), // default 7 days, unit: seconds, only work for private bucket
       },
     },
   },
@@ -33,7 +34,7 @@ module.exports = ({ env }) => ({
 
 ```
 
-### For strapi ce 3.6.8
+### For strapi ce 3.6.8+
 ```js
 // file: ./config/plugins.js
 module.exports = ({ env }) => ({
@@ -44,14 +45,14 @@ module.exports = ({ env }) => ({
       secretKey: env('MINIO_SECRET_KEY', 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'),
       bucket: env('MINIO_BUCKET', 'test-2021-09-22'),
       endPoint: env('MINIO_ENDPOINT', 'play.min.io'),
-      port: env('MINIO_PORT', '9000'),
-      useSSL: env('MINIO_USE_SSL', 'true'),
-      host: env('MINIO_HOST', 'play.min.io'),
+      port: env('MINIO_PORT', 9000),
+      useSSL: env('MINIO_USE_SSL', true),
       folder: env('MINIO_FOLDER', 'cms'),
     },
   },
 });
 ```
+
 
 ## Pictures cannot be displayed?
 Mostly because of CSP, you can refer to [https://github.com/strapi/strapi/issues/12886](https://github.com/strapi/strapi/issues/12886) 
