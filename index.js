@@ -13,6 +13,15 @@ module.exports = {
       accessKey,
       secretKey,
     });
+    const checkMinioConnection = async () => {
+      try {
+          const buckets = await MINIO.listBuckets();
+          console.log("Successfully connected to MinIO. Buckets:", buckets);
+      } catch (error) {
+          console.error("Failed to connect to MinIO:", error);
+      }
+    }
+    checkMinioConnection();
     const getUploadPath = (file) => {
       const pathChunk = file.path ? `${file.path}/` : '';
       const path = folder ? `${folder}/${pathChunk}` : pathChunk;
