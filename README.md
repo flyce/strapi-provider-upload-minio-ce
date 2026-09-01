@@ -1,6 +1,8 @@
+
+
 This upload provider uses the [JavaScript Minio.Client](https://docs.min.io/docs/javascript-client-api-reference.html) to upload files to a (self hosted) instance of [Minio](https://min.io/).
 
-It's compatible with the strapi ce 3.6.x and 4.x. And also support private bucket.
+It's compatible with the strapi ce 3.6.x and 4.x. And also support private bucket (4.x only).
 
 # How to use
 
